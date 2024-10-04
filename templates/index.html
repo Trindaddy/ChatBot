@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>PsicoBot</title>
+</head>
+
+<body>
+    <div class="chat-container">
+        <h1>Bem-vindo ao PsicoBot</h1>
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Digite sua mensagem...">
+        <button id="send-button">Enviar</button>
+    </div>
+    <script>
+        // Mensagem inicial do bot
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += `<div>PsicoBot: Olá, eu sou seu amigo PsicoBot e estou aqui para te ajudar. Você gostaria de conversar sobre como se sente? (sim/não)</div>`;
+
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value;
+            if (message) {
+                const chatBox = document.getElementById('chat-box');
+                chatBox.innerHTML += `<div class="message user-message">Você: ${message}</div>`;
+
+                userInput.value = '';
+
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                const data = await response.json();
+                chatBox.innerHTML += `<div class="message bot-message">PsicoBot: ${data.response}</div>`;
+
+                // Faz rolar para o final do chat box
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+    </script>
+</body>
+
+</html>
