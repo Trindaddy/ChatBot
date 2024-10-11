@@ -1,4 +1,4 @@
-# Bibliotecas usadas pip install flask re google-generativeai
+# Bibliotecas usadas pip install flask, re, google-generativeai
 Diário de Bordo do chatbot Ant-bullying
 
 #Início do Projeto
